@@ -64,6 +64,9 @@ def main():
     fp.close()
 
     try:
+        if not os.path.isfile(db):
+            logging.error("nzbdrone.db does not exist")
+            sys.exit(1)
         conn = sqlite3.connect(db)
         name = "SMA Post Process"
         settings = {
