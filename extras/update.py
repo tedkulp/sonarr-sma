@@ -5,8 +5,11 @@ import sys
 import logging
 import configparser
 import xml.etree.ElementTree as ET
+import json
+import sqlite3
 
 xml = "/config/config.xml"
+db = "/config/nzbdrone.db"
 autoProcess = os.path.join(os.environ.get("SMA_PATH", "/usr/local/sma"), "config/autoProcess.ini")
 
 
@@ -59,6 +62,20 @@ def main():
     fp = open(autoProcess, "w")
     safeConfigParser.write(fp)
     fp.close()
+
+    try:
+        conn = sqlite3.connect(db)
+        name = "SMA Post Process"
+        settings = {
+            "path": "/usr/local/sma/post%s.sh" % section,
+            "arguments": ""
+        }
+        settings = json.dumps(settings, indent=2)
+        query = "INSERT OR IGNORE INTO Notifications (ID, Name, OnGrab, OnDownload, OnUpgrade, OnRename, Settings, Tags, Implementation, ConfigContract) VALUES ((SELECT ID FROM Notifications WHERE Name = '%s'), '%s', 0, 1, 1, 0, '%s', '[]', 'CustomScript', 'CustomScriptSetting')" % (name, name, settings)
+        conn.execute(query)
+        conn.commit()
+    except:
+        logging.exception("Unable to add post script to Sonarr")
 
 
 if __name__ == '__main__':
