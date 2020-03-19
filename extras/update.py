@@ -74,7 +74,7 @@ def main():
             "arguments": ""
         }
         settings = json.dumps(settings, indent=2)
-        query = "INSERT OR IGNORE INTO Notifications (ID, Name, OnGrab, OnDownload, OnUpgrade, OnRename, Settings, Tags, Implementation, ConfigContract) VALUES ((SELECT ID FROM Notifications WHERE Name = '%s'), '%s', 0, 1, 1, 0, '%s', '[]', 'CustomScript', 'CustomScriptSetting')" % (name, name, settings)
+        query = "INSERT OR IGNORE INTO Notifications (ID, Name, OnGrab, OnDownload, OnUpgrade, OnRename, Settings, Tags, Implementation, ConfigContract) VALUES ((SELECT ID FROM Notifications WHERE Name = '%s'), '%s', 0, 1, 1, 0, '%s', '[]', 'CustomScript', 'CustomScriptSettings')" % (name, name, settings)
         conn.execute(query)
         conn.commit()
     except:
