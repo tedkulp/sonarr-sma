@@ -1,8 +1,5 @@
 FROM linuxserver/sonarr:latest
-
-ARG ffmpeg_tag=4.2-ubuntu
-ARG sonarr_tag=latest
-FROM jrottenberg/ffmpeg:${ffmpeg_tag} as ffmpeg
+FROM jrottenberg/ffmpeg:4.2-ubuntu as ffmpeg
 
 LABEL maintainer="mdhiggins <mdhiggins23@gmail.com>"
 
