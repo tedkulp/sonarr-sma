@@ -12,41 +12,39 @@ COPY --from=ffmpeg /usr/local/ /usr/local/
 
 # get python3 and git, and install python libraries
 RUN \
-  apt-get update && \
-  apt-get install -y \
-    git \
-    wget \
-    python3 \
-    python3-pip && \
-# make directory
+  apk update && \
+  apk add \
+  git \
+  wget \
+  python3 \
+  py3-pip && \
+  # make directory
   mkdir ${SMA_PATH} && \
-# download repo
+  # download repo
   git clone https://github.com/mdhiggins/sickbeard_mp4_automator.git ${SMA_PATH} && \
-# install pip, venv, and set up a virtual self contained python environment
-  python3 -m pip install --user --upgrade pip && \
-  python3 -m pip install --user virtualenv && \
+  # install pip, venv, and set up a virtual self contained python environment
+  python3 -m pip install --user --break-system-packages --upgrade pip && \
+  python3 -m pip install --user --break-system-packages virtualenv && \
   python3 -m virtualenv ${SMA_PATH}/venv && \
   ${SMA_PATH}/venv/bin/pip install -r ${SMA_PATH}/setup/requirements.txt && \
-# ffmpeg
+  # ffmpeg
   chgrp users /usr/local/bin/ffmpeg && \
   chgrp users /usr/local/bin/ffprobe && \
   chmod g+x /usr/local/bin/ffmpeg && \
   chmod g+x /usr/local/bin/ffprobe && \
-# cleanup
-  apt-get purge --auto-remove -y && \
-  apt-get clean && \
+  # cleanup
   rm -rf \
-    /tmp/* \
-    /var/lib/apt/lists/* \
-    /var/tmp/*
+  /tmp/* \
+  /var/lib/apt/lists/* \
+  /var/tmp/*
 
 RUN \
-	apt-get update -y && \
-	apt-get install -y --no-install-recommends libva-drm2 libva2 i965-va-driver && \
+  apk update && \
+  apk add libva libdrm libva-intel-driver && \
   rm -rf \
-    /tmp/* \
-    /var/lib/apt/lists/* \
-    /var/tmp/*
+  /tmp/* \
+  /var/lib/apt/lists/* \
+  /var/tmp/*
 
 EXPOSE 8989
 
