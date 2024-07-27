@@ -1,4 +1,4 @@
-FROM jrottenberg/ffmpeg:4.2-ubuntu as ffmpeg
+FROM jrottenberg/ffmpeg:4.4-ubuntu as ffmpeg
 FROM linuxserver/sonarr:latest
 
 LABEL maintainer="mdhiggins <mdhiggins23@gmail.com>"
@@ -22,6 +22,7 @@ RUN \
   mkdir ${SMA_PATH} && \
   # download repo
   git clone https://github.com/mdhiggins/sickbeard_mp4_automator.git ${SMA_PATH} && \
+  cat ${SMA_PATH}/setup/requirements.txt | sed 's/qtfaststart/qtfaststart\=\=24\.0/g' > ${SMA_PATH}/setup/requirements.txt && \
   # install pip, venv, and set up a virtual self contained python environment
   python3 -m pip install --user --break-system-packages --upgrade pip && \
   python3 -m pip install --user --break-system-packages virtualenv && \
